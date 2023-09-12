@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,25 +20,36 @@ public class ShopService
         return orderRepo;
     }
 
+    /*
+        NOTE: may return an empty order!
+     */
     public Order addOrder(List<String> productIds) {
         List<Product> products = new ArrayList<>();
         for (String productId : productIds) {
-            Product productToOrder = productRepo.getProductById(productId);
-            if (productToOrder == null) {
-                System.out.println("Product mit der Id: " + productId + " konnte nicht bestellt werden!");
+
+            Optional<Product> productToOrder = productRepo.getProductById(productId);
+
+            if (productToOrder.isPresent()) {
+                products.add(productToOrder.get());
+            } else {
                 return null;
             }
-            products.add(productToOrder);
         }
-
         Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING);
-
         return orderRepo.addOrder(newOrder);
+    }
+
+
+    public List<Product> getProducts() {
+        return productRepo.getProducts();
     }
 
     public Product getProdcutById(String id)
     {
-        return productRepo.getProductById(id);
+        if (productRepo.getProductById(id).isPresent()) {
+            return productRepo.getProductById(id).get();
+    }
+        return null;
     }
 
 
