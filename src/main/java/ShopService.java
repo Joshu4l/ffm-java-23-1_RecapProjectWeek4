@@ -53,8 +53,18 @@ public class ShopService
             }
             Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING);
             return orderRepo.addOrder(newOrder);
-
              */
+    }
+
+    public Optional<Order> updateOrder (String orderId, OrderState orderState) {
+        Optional<Order> optionalOrder = Optional.empty();
+        optionalOrder  = orderRepo.getOrders().stream()
+                .filter(order -> order.id().equals(orderId))
+                .findFirst();
+        Order updatedOrder = optionalOrder.get().withOrderState(orderState);
+        orderRepo.removeOrder(orderId);
+        orderRepo.addOrder(updatedOrder);
+        return Optional.ofNullable(updatedOrder);
     }
 
 
