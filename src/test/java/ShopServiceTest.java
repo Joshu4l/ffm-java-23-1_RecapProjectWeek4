@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,6 +58,27 @@ class ShopServiceTest
 
         assertEquals(true , actual.size() == 1);
         //assertTrue(actual.get(1).orderState().equals(OrderState.PROCESSING));
+    }
+
+    @Test
+    public void updateOrderTest() {
+        //GIVEN
+        Product p1 = shopService.getProdcutById("1");
+        Product p2 = shopService.getProdcutById("2");
+
+        List<String> productIds = new ArrayList<>();
+        productIds.add(p1.id());
+        productIds.add(p2.id());
+
+        Order addedOrder =  shopService.addOrder(productIds);
+
+        //WHEN
+        Optional<Order> actual =  shopService.updateOrder(addedOrder.id(), OrderState.IN_DELIVERY);
+        Order expected = shopService.getOrderRepo().getOrderById(addedOrder.id());
+
+        // THEN
+        assertEquals(expected, actual.get());
+
     }
 
 }
