@@ -27,6 +27,23 @@ public class ShopService
         List<Product> products = new ArrayList<>();
         for (String productId : productIds) {
 
+            try {
+                // potential query result
+                Optional<Product> productToOrder = productRepo.getProductById(productId);
+                // population of a list of products to be ordered using the query result above
+                products.add(productToOrder.get());
+                // preparation of a new order based on the list above
+                Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING);
+                return orderRepo.addOrder(newOrder);
+
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+
+            /*
+            HANDLING VIA OPTIONAL:
             Optional<Product> productToOrder = productRepo.getProductById(productId);
 
             if (productToOrder.isPresent()) {
@@ -34,9 +51,10 @@ public class ShopService
             } else {
                 return null;
             }
-        }
-        Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING);
-        return orderRepo.addOrder(newOrder);
+            Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING);
+            return orderRepo.addOrder(newOrder);
+
+             */
     }
 
 

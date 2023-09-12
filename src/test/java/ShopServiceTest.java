@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ShopServiceTest
 {
-
     ProductRepo productRepo = new ProductRepo();
     OrderRepo orderRepo = new OrderListRepo();
     ShopService shopService = new ShopService(orderRepo, productRepo);
+
     @Test
     void addOrderTest() {
         //GIVEN
