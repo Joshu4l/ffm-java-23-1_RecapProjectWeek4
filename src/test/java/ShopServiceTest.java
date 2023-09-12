@@ -2,14 +2,19 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShopServiceTest {
+class ShopServiceTest
+{
 
+    ProductRepo productRepo = new ProductRepo();
+    OrderRepo orderRepo = new OrderListRepo();
+    ShopService shopService = new ShopService(orderRepo, productRepo);
     @Test
     void addOrderTest() {
         //GIVEN
-        ShopService shopService = new ShopService();
+
         List<String> productsIds = List.of("1");
 
         //WHEN
@@ -24,7 +29,7 @@ class ShopServiceTest {
     @Test
     void addOrderTest_whenInvalidProductId_expectNull() {
         //GIVEN
-        ShopService shopService = new ShopService();
+
         List<String> productsIds = List.of("1", "2");
 
         //WHEN
@@ -33,4 +38,25 @@ class ShopServiceTest {
         //THEN
         assertNull(actual);
     }
+
+    @Test
+    public void getOrderByStateTest()
+    {
+        //GIVEN
+        Product p1 = shopService.getProdcutById("1");
+        Product p2 = shopService.getProdcutById("2");
+
+        Order order1 = new Order("1", List.of(p1), OrderState.PROCESSING);
+        Order order2 = new Order("2", List.of(p2), OrderState.IN_DELIVERY);
+
+        shopService.getOrderRepo().getOrders().add(order1);
+        shopService.getOrderRepo().getOrders().add(order2);
+
+        //WHEN
+        List<Order> actual = shopService.getOrderByOderState(OrderState.PROCESSING);
+
+        assertEquals(true , actual.size() == 1);
+        //assertTrue(actual.get(1).orderState().equals(OrderState.PROCESSING));
+    }
+
 }
