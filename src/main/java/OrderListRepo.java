@@ -1,7 +1,9 @@
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
+@ToString
 public class OrderListRepo implements OrderRepo{
     private List<Order> orders = new ArrayList<>();
 

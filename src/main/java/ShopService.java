@@ -1,3 +1,5 @@
+import lombok.RequiredArgsConstructor;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,16 +7,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class ShopService
 {
     private final OrderRepo orderRepo;
     private final ProductRepo productRepo;
 
-    public ShopService(OrderRepo orderRepo, ProductRepo productRepo)
-    {
-        this.orderRepo = orderRepo;
-        this.productRepo = productRepo;
-    }
 
     public OrderRepo getOrderRepo()
     {
@@ -33,15 +31,14 @@ public class ShopService
                 Optional<Product> productToOrder = productRepo.getProductById(productId);
                 // population of a list of products to be ordered using the query result above
                 products.add(productToOrder.get());
-                // preparation of a new order based on the list above
-                Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING, Instant.now());
-                return orderRepo.addOrder(newOrder);
 
             } catch (Exception e) {
                 return null;
             }
         }
-        return null;
+        // preparation of a new order based on the list above
+        Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING, Instant.now());
+        return orderRepo.addOrder(newOrder);
 
             /*
             HANDLING VIA OPTIONAL:
