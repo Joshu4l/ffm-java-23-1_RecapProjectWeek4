@@ -17,12 +17,13 @@ public class ProductRepo
         return products;
     }
 
+
     public Optional<Product> getProductById(String id) {
 
         for (Product product : products) {
             if (product.id().equals(id)) return Optional.ofNullable(product);
         }
-        return Optional.empty();
+        return null;
     }
 
     public Product addProduct(Product newProduct) {
@@ -30,13 +31,13 @@ public class ProductRepo
         return newProduct;
     }
 
-    public void removeProduct(String id) {
+    public Product removeProduct(String id) {
         for (Product product : products) {
            if (product.id().equals(id)) {
                products.remove(product);
-               return;
+               return product;
            }
-        }
+        } return null;
     }
 
     private void populateMockData()

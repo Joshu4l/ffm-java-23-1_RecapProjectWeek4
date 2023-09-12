@@ -1,3 +1,4 @@
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class ShopService
                 // population of a list of products to be ordered using the query result above
                 products.add(productToOrder.get());
                 // preparation of a new order based on the list above
-                Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING);
+                Order newOrder = new Order(UUID.randomUUID().toString(), products, OrderState.PROCESSING, Instant.now());
                 return orderRepo.addOrder(newOrder);
 
             } catch (Exception e) {
