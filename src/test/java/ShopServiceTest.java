@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ class ShopServiceTest
     OrderRepo orderRepo = new OrderListRepo();
     ShopService shopService = new ShopService(orderRepo, productRepo);
 
+    Instant fixedTimestamp = Instant.now();
+
     @Test
     void addOrderTest() {
         //GIVEN
@@ -23,7 +26,7 @@ class ShopServiceTest
         Order actual = shopService.addOrder(productsIds);
 
         //THEN
-        Order expected = new Order("-1", List.of(new Product("1", "Apfel")),OrderState.PROCESSING);
+        Order expected = new Order("-1", List.of(new Product("1", "Apfel")),OrderState.PROCESSING, fixedTimestamp);
         assertEquals(expected.products(), actual.products());
         assertNotNull(expected.id());
     }
@@ -47,8 +50,8 @@ class ShopServiceTest
         Product p1 = shopService.getProdcutById("1");
         Product p2 = shopService.getProdcutById("2");
 
-        Order order1 = new Order("1", List.of(p1), OrderState.PROCESSING);
-        Order order2 = new Order("2", List.of(p2), OrderState.IN_DELIVERY);
+        Order order1 = new Order("1", List.of(p1), OrderState.PROCESSING, fixedTimestamp);
+        Order order2 = new Order("2", List.of(p2), OrderState.IN_DELIVERY, fixedTimestamp);
 
         shopService.getOrderRepo().getOrders().add(order1);
         shopService.getOrderRepo().getOrders().add(order2);
